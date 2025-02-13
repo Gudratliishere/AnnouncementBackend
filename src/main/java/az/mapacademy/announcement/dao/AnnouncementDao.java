@@ -1,6 +1,7 @@
 package az.mapacademy.announcement.dao;
 
 import az.mapacademy.announcement.config.DatabaseConfig;
+import az.mapacademy.announcement.constant.QueryConstants;
 import az.mapacademy.announcement.entity.Announcement;
 import az.mapacademy.announcement.entity.Category;
 import az.mapacademy.announcement.entity.City;
@@ -18,31 +19,11 @@ import java.util.List;
 @Repository
 public class AnnouncementDao {
     public List<Announcement> findAll() {
-        List<Announcement> announcements = new ArrayList<Announcement>();
+        List<Announcement> announcements = new ArrayList<>();
 
         try (Connection connection = DatabaseConfig.getConnection()) {
-            String sql = """
-                    SELECT A.announcement_id,
-                           A.name,
-                           A.description,
-                           A.announcement_number,
-                           A.price,
-                           A.phone_number,
-                           A.seller_full_name,
-                           A.delivery,
-                           A.created_date,
-                           A.modified_date,
-                           C.city_id,
-                           C.name as city_name,
-                           ct.category_id,
-                           ct.NAME as category_name
-                    FROM announcements a
-                             LEFT JOIN cities c ON A.city_id = C.city_id
-                             LEFT JOIN categories ct ON A.category_id = ct.category_id;
-                    """;
-
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
+            ResultSet resultSet = statement.executeQuery(QueryConstants.GET_ANNOUNCEMENT_LIST_QUERY);
             while (resultSet.next()) {
                 Announcement announcement = new Announcement();
                 announcement.setAnnouncementId(resultSet.getLong("announcement_id"));
