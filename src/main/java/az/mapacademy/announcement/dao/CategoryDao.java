@@ -2,6 +2,7 @@ package az.mapacademy.announcement.dao;
 
 import az.mapacademy.announcement.config.DatabaseConfig;
 import az.mapacademy.announcement.entity.Category;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -14,6 +15,7 @@ import java.util.List;
  * @author : Dunay Gudratli
  * @since : 13.02.2025
  **/
+@Repository
 public class CategoryDao {
     public List<Category> findAll() {
         List<Category> categories = new ArrayList<>();

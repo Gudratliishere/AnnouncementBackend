@@ -4,6 +4,7 @@ import az.mapacademy.announcement.config.DatabaseConfig;
 import az.mapacademy.announcement.entity.Announcement;
 import az.mapacademy.announcement.entity.Category;
 import az.mapacademy.announcement.entity.City;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -14,6 +15,7 @@ import java.util.List;
  * @author : Dunay Gudratli
  * @since : 13.02.2025
  **/
+@Repository
 public class AnnouncementDao {
     public List<Announcement> findAll() {
         List<Announcement> announcements = new ArrayList<Announcement>();

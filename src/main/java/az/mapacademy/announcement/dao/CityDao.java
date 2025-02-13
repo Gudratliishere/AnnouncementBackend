@@ -2,6 +2,7 @@ package az.mapacademy.announcement.dao;
 
 import az.mapacademy.announcement.config.DatabaseConfig;
 import az.mapacademy.announcement.entity.City;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.List;
  * @author : Dunay Gudratli
  * @since : 11.02.2025
  **/
+@Repository
 public class CityDao {
     public List<City> findAll (){
         List<City> cities = new ArrayList<>();

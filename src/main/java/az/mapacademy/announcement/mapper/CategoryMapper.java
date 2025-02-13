@@ -2,6 +2,7 @@ package az.mapacademy.announcement.mapper;
 
 import az.mapacademy.announcement.dto.CategoryDto;
 import az.mapacademy.announcement.entity.Category;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
  * @author : Dunay Gudratli
  * @since : 13.02.2025
  **/
+@Component
 public class CategoryMapper {
     public CategoryDto toDto (Category category){
         CategoryDto categoryDto = new CategoryDto();

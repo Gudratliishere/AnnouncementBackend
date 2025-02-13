@@ -4,6 +4,8 @@ import az.mapacademy.announcement.dao.AnnouncementDao;
 import az.mapacademy.announcement.dto.AnnouncementDto;
 import az.mapacademy.announcement.entity.Announcement;
 import az.mapacademy.announcement.mapper.AnnouncementMapper;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -11,9 +13,11 @@ import java.util.List;
  * @author : Dunay Gudratli
  * @since : 13.02.2025
  **/
+@Service
+@RequiredArgsConstructor
 public class AnnouncementService {
-    private final AnnouncementDao announcementDao = new AnnouncementDao();
-    private final AnnouncementMapper announcementMapper = new AnnouncementMapper();
+    private final AnnouncementDao announcementDao;
+    private final AnnouncementMapper announcementMapper;
 
     public List<AnnouncementDto> getAllAnnouncements() {
         List<Announcement> announcements = announcementDao.findAll();
