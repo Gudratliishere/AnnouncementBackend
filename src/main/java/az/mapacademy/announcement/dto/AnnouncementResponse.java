@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
  * @since : 13.02.2025
  **/
 @Data
-public class AnnouncementDto {
+public class AnnouncementResponse {
     private Long announcementId;
     private String name;
     private String description;
