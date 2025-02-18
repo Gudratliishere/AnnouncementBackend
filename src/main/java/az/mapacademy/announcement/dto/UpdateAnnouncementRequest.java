@@ -7,13 +7,10 @@ import lombok.Data;
  * @since : 18.02.2025
  **/
 @Data
-public class AnnouncementRequest {
+public class UpdateAnnouncementRequest {
     private String name;
     private String description;
     private Double price;
-    private String phoneNumber;
     private String sellerFullName;
     private Boolean delivery;
-    private Long cityId;
-    private Long categoryId;
 }
