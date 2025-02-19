@@ -12,6 +12,7 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author : Dunay Gudratli
@@ -60,7 +61,7 @@ public class AnnouncementDao {
                 announcements.add(announcement);
             }
         } catch (SQLException e) {
-            log.error(e.getMessage(), e);
+            throw new RuntimeException(e);
         }
 
         return announcements;
@@ -82,7 +83,7 @@ public class AnnouncementDao {
 
             preparedStatement.execute();
         } catch (SQLException e) {
-            log.error(e.getMessage(), e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -99,7 +100,7 @@ public class AnnouncementDao {
 
             preparedStatement.execute();
         } catch (SQLException e) {
-            log.error(e.getMessage(), e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -111,11 +112,11 @@ public class AnnouncementDao {
 
             preparedStatement.execute();
         } catch (SQLException e) {
-            log.error(e.getMessage(), e);
+            throw new RuntimeException(e);
         }
     }
 
-    public Announcement getById(Long announcementId) {
+    public Optional<Announcement> findById(Long announcementId) {
         try (Connection connection = DatabaseConfig.getConnection()) {
             log.info("Get announcement by id query: {}", QueryConstants.GET_ANNOUNCEMENT_BY_ID);
             PreparedStatement preparedStatement = connection.prepareStatement(QueryConstants.GET_ANNOUNCEMENT_BY_ID);
@@ -151,12 +152,12 @@ public class AnnouncementDao {
                 Category category = new Category(categoryId, categoryName);
                 announcement.setCategory(category);
 
-                return announcement;
+                return Optional.of(announcement);
             }
         } catch (SQLException e) {
-            log.error(e.getMessage(), e);
+            throw new RuntimeException(e);
         }
 
-        return null;
+        return Optional.empty();
     }
 }

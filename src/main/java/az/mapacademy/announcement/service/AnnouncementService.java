@@ -5,12 +5,14 @@ import az.mapacademy.announcement.dto.AnnouncementResponse;
 import az.mapacademy.announcement.dto.CreateAnnouncementRequest;
 import az.mapacademy.announcement.dto.UpdateAnnouncementRequest;
 import az.mapacademy.announcement.entity.Announcement;
+import az.mapacademy.announcement.exception.NotFoundException;
 import az.mapacademy.announcement.mapper.AnnouncementMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author : Dunay Gudratli
@@ -48,8 +50,11 @@ public class AnnouncementService {
         announcementDao.delete(announcementId);
     }
 
-    public AnnouncementResponse getById (Long announcementId) {
-        Announcement announcement = announcementDao.getById(announcementId);
+    public AnnouncementResponse getById(Long announcementId) {
+        Optional<Announcement> optAnnouncement = announcementDao.findById(announcementId);
+        Announcement announcement = optAnnouncement.orElseThrow(() ->
+                new NotFoundException("Announcement is not found with id: " + announcementId));
+
         log.info("Announcement found: {}", announcement);
 
         return announcementMapper.toResponse(announcement);
