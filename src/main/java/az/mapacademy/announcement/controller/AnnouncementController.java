@@ -4,6 +4,7 @@ import az.mapacademy.announcement.dto.AnnouncementResponse;
 import az.mapacademy.announcement.dto.CreateAnnouncementRequest;
 import az.mapacademy.announcement.dto.UpdateAnnouncementRequest;
 import az.mapacademy.announcement.service.AnnouncementService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,7 @@ public class AnnouncementController {
     }
 
     @PostMapping
-    public void create(@RequestBody CreateAnnouncementRequest request) {
+    public void create(@RequestBody @Valid CreateAnnouncementRequest request) {
         log.info("Create announcement API is called, request: {}", request);
         announcementService.createAnnouncement(request);
     }
