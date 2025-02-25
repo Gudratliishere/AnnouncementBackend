@@ -27,7 +27,8 @@ public class QueryConstants {
                    ct.NAME as category_name
             FROM announcements a
                      LEFT JOIN cities c ON A.city_id = C.city_id
-                     LEFT JOIN categories ct ON A.category_id = ct.category_id;
+                     LEFT JOIN categories ct ON A.category_id = ct.category_id
+            LIMIT ? OFFSET ?;
             """;
     public static final String CREATE_ANNOUNCEMENT_QUERY = """
             INSERT INTO announcements
@@ -68,5 +69,8 @@ public class QueryConstants {
                      LEFT JOIN cities c ON A.city_id = C.city_id
                      LEFT JOIN categories ct ON A.category_id = ct.category_id
             WHERE announcement_id = ?
+            """;
+    public static final String GET_ANNOUNCEMENT_COUNT_QUERY = """
+            SELECT COUNT(*) as totalCount FROM announcements;
             """;
 }

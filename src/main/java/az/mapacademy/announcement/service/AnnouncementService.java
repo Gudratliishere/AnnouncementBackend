@@ -2,6 +2,7 @@ package az.mapacademy.announcement.service;
 
 import az.mapacademy.announcement.dao.AnnouncementDao;
 import az.mapacademy.announcement.dto.AnnouncementResponse;
+import az.mapacademy.announcement.dto.BaseResponse;
 import az.mapacademy.announcement.dto.CreateAnnouncementRequest;
 import az.mapacademy.announcement.dto.UpdateAnnouncementRequest;
 import az.mapacademy.announcement.entity.Announcement;
@@ -25,11 +26,25 @@ public class AnnouncementService {
     private final AnnouncementDao announcementDao;
     private final AnnouncementMapper announcementMapper;
 
-    public List<AnnouncementResponse> getAllAnnouncements() {
-        List<Announcement> announcements = announcementDao.findAll();
+    public BaseResponse<List<AnnouncementResponse>> getAllAnnouncements(int page, int size) {
+        List<Announcement> announcements = announcementDao.findAll(page, size);
         log.info("Announcements found: {}", announcements);
 
-        return announcementMapper.toResponseList(announcements);
+        Integer totalCount = announcementDao.getTotalAnnouncementsCount();//12
+        log.info("Total announcements count: {}", totalCount);
+        int pageCount;
+        if (totalCount % size == 0){
+            pageCount = totalCount / size;
+        } else {
+            pageCount = totalCount / size + 1;
+        }
+
+        var announcementList = announcementMapper.toResponseList(announcements);
+
+        BaseResponse<List<AnnouncementResponse>> baseResponse = new BaseResponse<>();
+        baseResponse.setData(announcementList);
+        baseResponse.setPageCount(pageCount);
+        return baseResponse;
     }
 
     public void createAnnouncement(CreateAnnouncementRequest request) {

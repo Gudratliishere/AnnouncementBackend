@@ -21,14 +21,19 @@ import java.util.Optional;
 @Slf4j
 @Repository
 public class AnnouncementDao {
-    public List<Announcement> findAll() {
+    public List<Announcement> findAll(int page, int size) {
         List<Announcement> announcements = new ArrayList<>();
 
         try (Connection connection = DatabaseConfig.getConnection()) {
-            Statement statement = connection.createStatement();
-
             log.info("Get announcement list query: {}", QueryConstants.GET_ANNOUNCEMENT_LIST_QUERY);
-            ResultSet resultSet = statement.executeQuery(QueryConstants.GET_ANNOUNCEMENT_LIST_QUERY);
+
+            int offset = size * (page - 1);
+
+            PreparedStatement statement = connection.prepareStatement(QueryConstants.GET_ANNOUNCEMENT_LIST_QUERY);
+            statement.setInt(1, size);
+            statement.setInt(2, offset);
+
+            ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Announcement announcement = new Announcement();
                 announcement.setAnnouncementId(resultSet.getLong("announcement_id"));
@@ -159,5 +164,20 @@ public class AnnouncementDao {
         }
 
         return Optional.empty();
+    }
+
+    public Integer getTotalAnnouncementsCount() {
+        try (Connection connection = DatabaseConfig.getConnection()) {
+            log.info("Get announcement count query: {}", QueryConstants.GET_ANNOUNCEMENT_COUNT_QUERY);
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(QueryConstants.GET_ANNOUNCEMENT_COUNT_QUERY);
+            if (resultSet.next()) {
+                return resultSet.getInt("totalCount");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return 0;
     }
 }
