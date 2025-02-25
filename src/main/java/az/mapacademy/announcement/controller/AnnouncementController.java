@@ -36,7 +36,7 @@ public class AnnouncementController {
 
     @PutMapping("/{announcementId}") //path variable
     public void update(@PathVariable("announcementId") Long announcementId,
-                       @RequestBody UpdateAnnouncementRequest request) {
+                       @RequestBody @Valid UpdateAnnouncementRequest request) {
         log.info("Update announcement API is called, announcementId: {}, request: {}",
                 announcementId, request);
         announcementService.updateAnnouncement(announcementId, request);
