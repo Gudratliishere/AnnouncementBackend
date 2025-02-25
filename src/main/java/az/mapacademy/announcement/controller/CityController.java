@@ -1,5 +1,6 @@
 package az.mapacademy.announcement.controller;
 
+import az.mapacademy.announcement.dto.BaseResponse;
 import az.mapacademy.announcement.dto.CityDto;
 import az.mapacademy.announcement.service.CityService;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +23,12 @@ public class CityController {
     private final CityService cityService;
 
     @GetMapping
-    public List<CityDto> getCities() {
+    public BaseResponse<List<CityDto>> getCities() {
         log.info("Get cities API is called");
-        return cityService.getAll();
+        List<CityDto> cities = cityService.getAll();
+
+        BaseResponse<List<CityDto>> baseResponse = new BaseResponse<>();
+        baseResponse.setData(cities);
+        return baseResponse;
     }
 }

@@ -1,6 +1,7 @@
 package az.mapacademy.announcement.controller;
 
 import az.mapacademy.announcement.dto.AnnouncementResponse;
+import az.mapacademy.announcement.dto.BaseResponse;
 import az.mapacademy.announcement.dto.CreateAnnouncementRequest;
 import az.mapacademy.announcement.dto.UpdateAnnouncementRequest;
 import az.mapacademy.announcement.service.AnnouncementService;
@@ -23,9 +24,14 @@ public class AnnouncementController {
     private final AnnouncementService announcementService;
 
     @GetMapping
-    public List<AnnouncementResponse> getAnnouncements() {
+    public BaseResponse<List<AnnouncementResponse>> getAnnouncements() {
         log.info("Get announcements API is called");
-        return announcementService.getAllAnnouncements();
+
+        List<AnnouncementResponse> responses = announcementService.getAllAnnouncements();
+
+        BaseResponse<List<AnnouncementResponse>> baseResponse = new BaseResponse<>();
+        baseResponse.setData(responses);
+        return baseResponse;
     }
 
     @PostMapping
@@ -49,8 +55,12 @@ public class AnnouncementController {
     }
 
     @GetMapping("/{announcementId}")
-    public AnnouncementResponse getById(@PathVariable("announcementId") Long announcementId) {
+    public BaseResponse<AnnouncementResponse> getById(@PathVariable("announcementId") Long announcementId) {
         log.info("Get announcement API is called, announcementId: {}", announcementId);
-        return announcementService.getById(announcementId);
+        AnnouncementResponse response = announcementService.getById(announcementId);
+
+        BaseResponse<AnnouncementResponse> baseResponse = new BaseResponse<>();
+        baseResponse.setData(response);
+        return baseResponse;
     }
 }

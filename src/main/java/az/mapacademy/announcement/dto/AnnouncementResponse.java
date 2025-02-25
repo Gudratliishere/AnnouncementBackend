@@ -1,6 +1,8 @@
 package az.mapacademy.announcement.dto;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
 
@@ -9,17 +11,18 @@ import java.time.LocalDateTime;
  * @since : 13.02.2025
  **/
 @Data
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class AnnouncementResponse {
-    private Long announcementId;
-    private String name;
-    private String description;
-    private Long announcementNumber;
-    private Double price;
-    private String phoneNumber;
-    private String sellerFullName;
-    private Boolean delivery;
-    private LocalDateTime createdDate;
-    private LocalDateTime modifiedDate;
-    private CityDto city;
-    private CategoryDto category;
+    Long announcementId;
+    String name;
+    String description;
+    Long announcementNumber;
+    Double price;
+    String phoneNumber;
+    String sellerFullName;
+    Boolean delivery;
+    LocalDateTime createdDate;
+    LocalDateTime modifiedDate;
+    CityDto city;
+    CategoryDto category;
 }
