@@ -8,8 +8,8 @@ import az.mapacademy.announcement.dto.UpdateAnnouncementRequest;
 import az.mapacademy.announcement.entity.Announcement;
 import az.mapacademy.announcement.exception.NotFoundException;
 import az.mapacademy.announcement.mapper.AnnouncementMapper;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,10 +21,16 @@ import java.util.Optional;
  **/
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class AnnouncementService {
     private final AnnouncementDao announcementDao;
     private final AnnouncementMapper announcementMapper;
+
+    public AnnouncementService(
+            @Qualifier("announcementDaoJpaImpl") AnnouncementDao announcementDao,
+            AnnouncementMapper announcementMapper) {
+        this.announcementDao = announcementDao;
+        this.announcementMapper = announcementMapper;
+    }
 
     public BaseResponse<List<AnnouncementResponse>> getAllAnnouncements(int page, int size) {
         List<Announcement> announcements = announcementDao.findAll(page, size);
@@ -33,7 +39,7 @@ public class AnnouncementService {
         Integer totalCount = announcementDao.getTotalAnnouncementsCount();//12
         log.info("Total announcements count: {}", totalCount);
         int pageCount;
-        if (totalCount % size == 0){
+        if (totalCount % size == 0) {
             pageCount = totalCount / size;
         } else {
             pageCount = totalCount / size + 1;
@@ -55,7 +61,11 @@ public class AnnouncementService {
     }
 
     public void updateAnnouncement(Long announcementId, UpdateAnnouncementRequest request) {
-        Announcement announcement = announcementMapper.toEntity(announcementId, request);
+        Optional<Announcement> optAnnouncement = announcementDao.findById(announcementId);
+        Announcement announcement = optAnnouncement.orElseThrow(() ->
+                new NotFoundException("Announcement is not found with id: " + announcementId));
+
+        announcementMapper.populate(request, announcement);
         log.info("Announcement update entity: {}", announcement);
 
         announcementDao.update(announcement);

@@ -1,5 +1,6 @@
 package az.mapacademy.announcement.entity;
 
+import jakarta.persistence.*;
 import lombok.*;
 
 /**
@@ -8,7 +9,13 @@ import lombok.*;
  **/
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name = "cities")
 public class City {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "city_id")
     private Long cityId;
     private String name;
 }
