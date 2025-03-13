@@ -20,11 +20,13 @@ public class Announcement {
     private String description;
     private Long announcementNumber;
     private Double price;
-    private String phoneNumber;
-    private String sellerFullName;
     private Boolean delivery;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
+
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    @ManyToOne
+    private User user;
 
     @JoinColumn(name = "city_id", referencedColumnName = "city_id")
     @ManyToOne
