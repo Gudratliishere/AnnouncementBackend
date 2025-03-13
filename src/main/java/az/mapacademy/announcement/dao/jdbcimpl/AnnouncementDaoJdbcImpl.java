@@ -6,7 +6,9 @@ import az.mapacademy.announcement.dao.AnnouncementDao;
 import az.mapacademy.announcement.entity.Announcement;
 import az.mapacademy.announcement.entity.Category;
 import az.mapacademy.announcement.entity.City;
+import az.mapacademy.announcement.enums.SortDirection;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
@@ -23,7 +25,7 @@ import java.util.Optional;
 @Repository("announcementDaoJdbcImpl")
 public class AnnouncementDaoJdbcImpl implements AnnouncementDao {
     @Override
-    public List<Announcement> findAll(int page, int size) {
+    public Page<Announcement> findAll(int page, int size, SortDirection sortCreatedDate, String name, String description) {
         List<Announcement> announcements = new ArrayList<>();
 
         try (Connection connection = DatabaseConfig.getConnection()) {
@@ -71,7 +73,7 @@ public class AnnouncementDaoJdbcImpl implements AnnouncementDao {
             throw new RuntimeException(e);
         }
 
-        return announcements;
+        return Page.empty();
     }
 
     @Override

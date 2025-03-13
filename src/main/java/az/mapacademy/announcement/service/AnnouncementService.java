@@ -6,10 +6,12 @@ import az.mapacademy.announcement.dto.BaseResponse;
 import az.mapacademy.announcement.dto.CreateAnnouncementRequest;
 import az.mapacademy.announcement.dto.UpdateAnnouncementRequest;
 import az.mapacademy.announcement.entity.Announcement;
+import az.mapacademy.announcement.enums.SortDirection;
 import az.mapacademy.announcement.exception.NotFoundException;
 import az.mapacademy.announcement.mapper.AnnouncementMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,24 +34,17 @@ public class AnnouncementService {
         this.announcementMapper = announcementMapper;
     }
 
-    public BaseResponse<List<AnnouncementResponse>> getAllAnnouncements(int page, int size) {
-        List<Announcement> announcements = announcementDao.findAll(page, size);
+    public BaseResponse<List<AnnouncementResponse>> getAllAnnouncements(
+            int page, int size, SortDirection sortCreatedDate, String name, String description) {
+        Page<Announcement> announcementsPage = announcementDao.findAll(page, size, sortCreatedDate, name, description);
+        List<Announcement> announcements = announcementsPage.getContent();
         log.info("Announcements found: {}", announcements);
-
-        Integer totalCount = announcementDao.getTotalAnnouncementsCount();//12
-        log.info("Total announcements count: {}", totalCount);
-        int pageCount;
-        if (totalCount % size == 0) {
-            pageCount = totalCount / size;
-        } else {
-            pageCount = totalCount / size + 1;
-        }
 
         var announcementList = announcementMapper.toResponseList(announcements);
 
         BaseResponse<List<AnnouncementResponse>> baseResponse = new BaseResponse<>();
         baseResponse.setData(announcementList);
-        baseResponse.setPageCount(pageCount);
+        baseResponse.setPageCount(announcementsPage.getTotalPages());
         return baseResponse;
     }
 

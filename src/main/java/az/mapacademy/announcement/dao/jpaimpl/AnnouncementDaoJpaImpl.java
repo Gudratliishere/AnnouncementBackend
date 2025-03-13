@@ -2,12 +2,16 @@ package az.mapacademy.announcement.dao.jpaimpl;
 
 import az.mapacademy.announcement.dao.AnnouncementDao;
 import az.mapacademy.announcement.entity.Announcement;
+import az.mapacademy.announcement.enums.SortDirection;
 import az.mapacademy.announcement.repository.AnnouncementRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -21,10 +25,24 @@ public class AnnouncementDaoJpaImpl implements AnnouncementDao {
     private final AnnouncementRepository announcementRepository;
 
     @Override
-    public List<Announcement> findAll(int page, int size) {
+    public Page<Announcement> findAll(int page, int size, SortDirection sortCreatedDate, String name, String description) {
         log.info("Find All announcements method is called from jpa impl of AnnouncementDao");
 
-        return announcementRepository.findAll();
+        Sort sort = null;
+        if (sortCreatedDate == SortDirection.ASC) {
+            sort = Sort.by(Sort.Direction.ASC, "createdDate");
+        } else if (sortCreatedDate == SortDirection.DESC) {
+            sort = Sort.by(Sort.Direction.DESC, "createdDate");
+        }
+
+        Pageable pageable;
+        if (sort != null) {
+            pageable = PageRequest.of(page - 1, size, sort);
+        } else {
+            pageable = PageRequest.of(page - 1, size);
+        }
+
+        return announcementRepository.findAllByNameContainingAndDescriptionContaining(name, description, pageable);
     }
 
     @Override

@@ -4,6 +4,7 @@ import az.mapacademy.announcement.dto.AnnouncementResponse;
 import az.mapacademy.announcement.dto.BaseResponse;
 import az.mapacademy.announcement.dto.CreateAnnouncementRequest;
 import az.mapacademy.announcement.dto.UpdateAnnouncementRequest;
+import az.mapacademy.announcement.enums.SortDirection;
 import az.mapacademy.announcement.service.AnnouncementService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,10 +27,13 @@ public class AnnouncementController {
     @GetMapping
     public BaseResponse<List<AnnouncementResponse>> getAnnouncements(
             @RequestParam("page") int page,
-            @RequestParam("size") int size) {
+            @RequestParam("size") int size,
+            @RequestParam(value = "sortByCreatedDate", required = false) SortDirection sortCreatedDate,
+            @RequestParam(value = "name", required = false, defaultValue = "") String name,
+            @RequestParam(value = "description", required = false, defaultValue = "") String description) {
         log.info("Get announcements API is called");
 
-        return announcementService.getAllAnnouncements(page, size);
+        return announcementService.getAllAnnouncements(page, size, sortCreatedDate, name, description);
     }
 
     @PostMapping

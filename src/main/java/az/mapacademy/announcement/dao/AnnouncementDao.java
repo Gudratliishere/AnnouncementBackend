@@ -1,8 +1,9 @@
 package az.mapacademy.announcement.dao;
 
 import az.mapacademy.announcement.entity.Announcement;
+import az.mapacademy.announcement.enums.SortDirection;
+import org.springframework.data.domain.Page;
 
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -10,7 +11,7 @@ import java.util.Optional;
  * @since : 04.03.2025
  **/
 public interface AnnouncementDao {
-    List<Announcement> findAll(int page, int size);
+    Page<Announcement> findAll(int page, int size, SortDirection sortCreatedDate, String name, String description);
 
     void create(Announcement announcement);
 
