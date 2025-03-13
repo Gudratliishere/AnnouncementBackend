@@ -42,7 +42,7 @@ public class AnnouncementDaoJpaImpl implements AnnouncementDao {
             pageable = PageRequest.of(page - 1, size);
         }
 
-        return announcementRepository.findAllByNameContainingAndDescriptionContaining(name, description, pageable);
+        return announcementRepository.findAllWithSql(name, description, pageable);
     }
 
     @Override
