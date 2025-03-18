@@ -31,4 +31,9 @@ public class UserDaoJpaImpl implements UserDao {
     public void delete(Long id) {
         userRepository.deleteById(id);
     }
+
+    @Override
+    public Optional<User> findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
 }

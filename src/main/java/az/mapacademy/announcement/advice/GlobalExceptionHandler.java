@@ -1,6 +1,7 @@
 package az.mapacademy.announcement.advice;
 
 import az.mapacademy.announcement.dto.BaseResponse;
+import az.mapacademy.announcement.exception.ConflictException;
 import az.mapacademy.announcement.exception.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -27,6 +28,17 @@ public class GlobalExceptionHandler {
         baseResponse.setMessage(e.getMessage());
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(baseResponse);
+    }
+
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<Object> handleConflictException(ConflictException e) {
+        log.error(e.getMessage());
+
+        BaseResponse<Void> baseResponse = new BaseResponse<>();
+        baseResponse.setMessage(e.getMessage());
+
+        return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(baseResponse);
     }
 

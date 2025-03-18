@@ -1,6 +1,7 @@
 package az.mapacademy.announcement.dto;
 
 import az.mapacademy.announcement.enums.Role;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -20,6 +21,10 @@ public class UserResponse {
     private String email;
     private String username;
     private Role role;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdDate;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime modifiedDate;
 }
