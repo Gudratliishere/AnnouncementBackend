@@ -28,8 +28,8 @@ public class JwtService {
 
     public String generateAccessToken(User user) {
         return Jwts.builder()
-                .setSubject(user.getUsername())
                 .setClaims(Map.of("roles", user.getRole()))
+                .setSubject(user.getUsername())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expireTime))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
@@ -38,6 +38,10 @@ public class JwtService {
 
     public Boolean isAccessTokenValid(String token) {
         return !isTokenExpired(token);
+    }
+
+    public String extractUsername (String token){
+        return extractClaim(token, Claims::getSubject);
     }
 
     //helper functions
