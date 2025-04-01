@@ -4,6 +4,7 @@ import az.mapacademy.announcement.dto.AnnouncementResponse;
 import az.mapacademy.announcement.dto.CreateAnnouncementRequest;
 import az.mapacademy.announcement.dto.UpdateAnnouncementRequest;
 import az.mapacademy.announcement.entity.Announcement;
+import az.mapacademy.announcement.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -19,6 +20,8 @@ import java.util.List;
 @Mapper(componentModel = "spring",
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface AnnouncementMapper {
+    @Mapping(source = "user.phoneNumber", target = "phoneNumber")
+    @Mapping(target = "sellerFullName", expression = "java(mapName(announcement.getUser()))")
     AnnouncementResponse toResponse(Announcement announcement);
 
     List<AnnouncementResponse> toResponseList(List<Announcement> announcements);
@@ -40,5 +43,9 @@ public interface AnnouncementMapper {
 
     default LocalDateTime getNow() {
         return LocalDateTime.now();
+    }
+
+    default String mapName(User user) {
+        return user.getName() + " " + user.getSurname();
     }
 }

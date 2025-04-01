@@ -39,14 +39,18 @@ public class AnnouncementController {
     }
 
     @PostMapping
-    public void create(@RequestBody @Valid CreateAnnouncementRequest request) {
+    public BaseResponse<AnnouncementResponse> create(@RequestBody @Valid CreateAnnouncementRequest request) {
         log.info("Create announcement API is called, request: {}", request);
-        announcementService.createAnnouncement(request);
+        var response = announcementService.createAnnouncement(request);
+
+        BaseResponse<AnnouncementResponse> baseResponse = new BaseResponse<>();
+        baseResponse.setData(response);
+        return baseResponse;
     }
 
     @PutMapping("/{announcementId}") //path variable
     public void update(@PathVariable("announcementId") Long announcementId,
-                       @RequestBody @Valid UpdateAnnouncementRequest request) {
+                       @RequestBody UpdateAnnouncementRequest request) {
         log.info("Update announcement API is called, announcementId: {}, request: {}",
                 announcementId, request);
         announcementService.updateAnnouncement(announcementId, request);

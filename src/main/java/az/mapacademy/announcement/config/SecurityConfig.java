@@ -41,6 +41,10 @@ public class SecurityConfig {
                 .sessionManagement(httpSecuritySessionManagementConfigurer ->
                         httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
+                        auth.requestMatchers(
+                                "/api/v1/auth/login",
+                                "/api/v1/auth/sign-up").permitAll())
+                .authorizeHttpRequests(auth ->
                         auth.anyRequest().authenticated())
                 .addFilterBefore(authorizationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authenticationProvider(authenticationProvider());

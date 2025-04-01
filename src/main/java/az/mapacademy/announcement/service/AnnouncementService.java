@@ -12,6 +12,7 @@ import az.mapacademy.announcement.mapper.AnnouncementMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,12 +27,15 @@ import java.util.Optional;
 public class AnnouncementService {
     private final AnnouncementDao announcementDao;
     private final AnnouncementMapper announcementMapper;
+    private final UserService userService;
 
     public AnnouncementService(
             @Qualifier("announcementDaoJpaImpl") AnnouncementDao announcementDao,
-            AnnouncementMapper announcementMapper) {
+            AnnouncementMapper announcementMapper,
+            UserService userService) {
         this.announcementDao = announcementDao;
         this.announcementMapper = announcementMapper;
+        this.userService = userService;
     }
 
     public BaseResponse<List<AnnouncementResponse>> getAllAnnouncements(
@@ -48,11 +52,18 @@ public class AnnouncementService {
         return baseResponse;
     }
 
-    public void createAnnouncement(CreateAnnouncementRequest request) {
+    public AnnouncementResponse createAnnouncement(CreateAnnouncementRequest request) {
         Announcement announcement = announcementMapper.toEntity(request);
         log.info("Announcement create entity: {}", announcement);
 
-        announcementDao.create(announcement);
+        String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+
+        var user = userService.getByUsername(username)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+        announcement.setUser(user);
+
+        announcement = announcementDao.create(announcement);
+        return announcementMapper.toResponse(announcement);
     }
 
     public void updateAnnouncement(Long announcementId, UpdateAnnouncementRequest request) {

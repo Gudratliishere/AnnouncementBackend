@@ -1,6 +1,8 @@
 package az.mapacademy.announcement.dto;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 /**
@@ -17,12 +19,6 @@ public class CreateAnnouncementRequest {
     @Min(value = 0, message = "Price must be greater than or equal to zero")
     private Double price;
 
-    @NotNull(message = "Phone number can not be null")
-    @Size(min = 10, max = 10, message = "Phone number must contain 10 characters")
-    @Pattern(regexp = "\\d{10}", message = "Phone number must contain only digits")
-    private String phoneNumber;
-
-    private String sellerFullName;
     private Boolean delivery;
 
     @NotNull(message = "City id can not be null")

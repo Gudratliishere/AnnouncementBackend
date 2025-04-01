@@ -46,10 +46,10 @@ public class AnnouncementDaoJpaImpl implements AnnouncementDao {
     }
 
     @Override
-    public void create(Announcement announcement) {
+    public Announcement create(Announcement announcement) {
         log.info("Create announcement is called from jpa impl of AnnouncementDao");
 
-        announcementRepository.save(announcement);
+        return announcementRepository.save(announcement);
     }
 
     @Override
