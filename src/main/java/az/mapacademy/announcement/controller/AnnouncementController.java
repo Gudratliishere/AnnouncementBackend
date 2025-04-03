@@ -6,7 +6,6 @@ import az.mapacademy.announcement.dto.CreateAnnouncementRequest;
 import az.mapacademy.announcement.dto.UpdateAnnouncementRequest;
 import az.mapacademy.announcement.enums.SortDirection;
 import az.mapacademy.announcement.service.AnnouncementService;
-import az.mapacademy.announcement.service.JwtService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +23,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AnnouncementController {
     private final AnnouncementService announcementService;
-    private final JwtService jwtService;
 
     @GetMapping
     public BaseResponse<List<AnnouncementResponse>> getAnnouncements(
@@ -36,6 +34,15 @@ public class AnnouncementController {
         log.info("Get announcements API is called");
 
         return announcementService.getAllAnnouncements(page, size, sortCreatedDate, name, description);
+    }
+
+    @GetMapping("/my-announcements")
+    public BaseResponse<List<AnnouncementResponse>> getMyAnnouncements(
+            @RequestParam("page") int page,
+            @RequestParam("size") int size) {
+        log.info("Get my announcements API is called");
+
+        return announcementService.getMyAllAnnouncements(page, size);
     }
 
     @PostMapping

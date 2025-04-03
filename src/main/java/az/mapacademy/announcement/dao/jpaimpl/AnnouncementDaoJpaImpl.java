@@ -46,6 +46,15 @@ public class AnnouncementDaoJpaImpl implements AnnouncementDao {
     }
 
     @Override
+    public Page<Announcement> findAllByUsername(int page, int size, String username) {
+        log.info("Find all announcements by username method is called from jpa impl of AnnouncementDao");
+
+        Pageable pageable = PageRequest.of(page - 1, size);
+
+        return announcementRepository.findAllByUserUsername(username, pageable);
+    }
+
+    @Override
     public Announcement create(Announcement announcement) {
         log.info("Create announcement is called from jpa impl of AnnouncementDao");
 

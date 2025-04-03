@@ -13,6 +13,8 @@ import java.util.Optional;
 public interface AnnouncementDao {
     Page<Announcement> findAll(int page, int size, SortDirection sortCreatedDate, String name, String description);
 
+    Page<Announcement> findAllByUsername(int page, int size, String username);
+
     Announcement create(Announcement announcement);
 
     void update(Announcement announcement);

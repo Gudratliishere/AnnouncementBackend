@@ -31,4 +31,6 @@ public interface AnnouncementRepository extends JpaRepository<Announcement, Long
             and description like concat('%', :description, '%')
             """, nativeQuery = true)
     Page<Announcement> findAllWithSql(@Param("name") String name, @Param("description") String description, Pageable pageable);
+
+    Page<Announcement> findAllByUserUsername(String username, Pageable pageable);
 }
