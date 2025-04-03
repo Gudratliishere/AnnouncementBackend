@@ -1,6 +1,7 @@
 package az.mapacademy.announcement.service;
 
 import az.mapacademy.announcement.entity.User;
+import az.mapacademy.announcement.enums.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -40,8 +41,14 @@ public class JwtService {
         return !isTokenExpired(token);
     }
 
-    public String extractUsername (String token){
+    public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
+    }
+
+    public Role extractRole(String token) {
+        Claims claims = extractAllClaims(token);
+        String role = claims.get("roles", String.class);//USER
+        return Role.valueOf(role);
     }
 
     //helper functions

@@ -3,6 +3,7 @@ package az.mapacademy.announcement.service;
 import az.mapacademy.announcement.dao.UserDao;
 import az.mapacademy.announcement.dto.UserResponse;
 import az.mapacademy.announcement.dto.UserUpdateRequest;
+import az.mapacademy.announcement.dto.UserUpdateStatusRequest;
 import az.mapacademy.announcement.entity.User;
 import az.mapacademy.announcement.exception.NotFoundException;
 import az.mapacademy.announcement.mapper.UserMapper;
@@ -41,6 +42,14 @@ public class UserService {
         String username = getUsername();
         var user = getByUsername(username)
                 .orElseThrow(() -> new NotFoundException("User not found"));
+        return userMapper.toResponse(user);
+    }
+
+    public UserResponse updateUserStatus(Long userId, UserUpdateStatusRequest request) {
+        var user = userDao.findById(userId)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+        user.setEnabled(request.status());
+        user = userDao.save(user);
         return userMapper.toResponse(user);
     }
 

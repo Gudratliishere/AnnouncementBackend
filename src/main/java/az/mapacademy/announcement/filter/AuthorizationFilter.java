@@ -1,6 +1,7 @@
 package az.mapacademy.announcement.filter;
 
 import az.mapacademy.announcement.dto.BaseResponse;
+import az.mapacademy.announcement.enums.Role;
 import az.mapacademy.announcement.service.JwtService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -13,12 +14,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author : Dunay Gudratli
@@ -55,8 +58,10 @@ public class AuthorizationFilter extends OncePerRequestFilter {
                     String username = jwtService.extractUsername(token);
 
                     if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                        Role role = jwtService.extractRole(token);
+
                         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                                username, null, null);
+                                username, null, List.of(new SimpleGrantedAuthority(role.name())));
                         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
