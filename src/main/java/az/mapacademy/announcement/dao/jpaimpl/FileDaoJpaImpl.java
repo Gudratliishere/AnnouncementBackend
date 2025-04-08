@@ -6,8 +6,6 @@ import az.mapacademy.announcement.repository.FileRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
-
 /**
  * @author : Dunay Gudratli
  * @since : 08.04.2025
@@ -25,10 +23,5 @@ public class FileDaoJpaImpl implements FileDao {
     @Override
     public void remove(Long id) {
         fileRepository.deleteById(id);
-    }
-
-    @Override
-    public Optional<File> findById(Long id) {
-        return fileRepository.findById(id);
     }
 }
