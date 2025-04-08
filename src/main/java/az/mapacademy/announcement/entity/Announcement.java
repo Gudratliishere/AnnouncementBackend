@@ -35,4 +35,8 @@ public class Announcement {
     @JoinColumn(name = "category_id", referencedColumnName = "category_id")
     @ManyToOne
     private Category category;
+
+    @JoinColumn(name = "file_id", referencedColumnName = "file_id")
+    @OneToOne(cascade = CascadeType.ALL)
+    private File file;
 }

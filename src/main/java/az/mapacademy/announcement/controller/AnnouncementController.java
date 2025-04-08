@@ -9,7 +9,13 @@ import az.mapacademy.announcement.service.AnnouncementService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -77,5 +83,32 @@ public class AnnouncementController {
         BaseResponse<AnnouncementResponse> baseResponse = new BaseResponse<>();
         baseResponse.setData(response);
         return baseResponse;
+    }
+
+    @PostMapping("/{announcementId}/files")
+    public void uploadFile(
+            @PathVariable("announcementId") Long announcementId,
+            @RequestPart("file") MultipartFile multipartFile) {
+        log.info("File is uploading.");
+        announcementService.uploadFile(announcementId, multipartFile);
+    }
+
+    @GetMapping("/{announcementId}/files")
+    public ResponseEntity<Resource> downloadFile(
+            @PathVariable("announcementId") Long announcementId) {
+        log.info("File is downloading.");
+        var fileResponse = announcementService.downloadFile(announcementId);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(fileResponse.getType()))
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"" + fileResponse.getName())
+                .body(new ByteArrayResource(fileResponse.getData()));
+    }
+
+    @DeleteMapping("/{announcementId}/files")
+    public void deleteFile(@PathVariable("announcementId") Long announcementId) {
+        log.info("File is deleting.");
+        announcementService.deleteFile(announcementId);
     }
 }
