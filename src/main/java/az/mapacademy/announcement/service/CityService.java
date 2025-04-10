@@ -33,6 +33,6 @@ public class CityService {
 
         log.info("Cities got: {}", cities);
 
-        return cityMapper.toDtoList(cities);
+        return cityMapper.toDtoList(cities);//
     }
 }

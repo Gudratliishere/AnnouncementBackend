@@ -19,7 +19,6 @@ public class FileUtil {
     public static void saveFile(String fileName, MultipartFile multipartFile) {
         Path uploadPath = Paths.get(FILE_DIRECTORY);
 
-
         try (InputStream inputStream = multipartFile.getInputStream()) {
             if (!Files.exists(uploadPath))
                 Files.createDirectory(uploadPath);
